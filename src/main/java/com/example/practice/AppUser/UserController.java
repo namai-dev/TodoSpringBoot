@@ -29,4 +29,8 @@ public class UserController {
             return appUserService.getSingleUse(id);
 
     }
+    
+    public String inIt(){
+     return "Just testing....";
+    }
 }
