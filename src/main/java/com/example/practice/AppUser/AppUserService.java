@@ -77,6 +77,10 @@ public class AppUserService {
         appUser.get().setRefreshToken(refreshToken);
         appUser.get().setAccessToken(token);
     }
+    
+    publi String gitHub(){
+       return "Perfoming pull reguests on github.."
+    }
 
 
 }
