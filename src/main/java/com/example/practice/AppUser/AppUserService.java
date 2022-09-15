@@ -2,8 +2,8 @@ package com.example.practice.AppUser;
 
 import com.example.practice.roles.RoleRepository;
 import com.example.practice.roles.Roles;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.example.practice.todo.Todo;
+import com.example.practice.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,8 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,9 @@ public class AppUserService {
     public final  UserRepository repository;
     @Autowired
     public final  RoleRepository roleRepository;
+
+    public final TodoRepository todoRepository;
+
 
     @Autowired
    PasswordEncoder passwordEncoder;
@@ -42,6 +44,46 @@ public class AppUserService {
 
         return repository.findAll();
     }
+
+    public void deleteUser(Long id){
+        repository.deleteById(id);
+    }
+
+    public Collection<Todo> getTodos(String username){
+        Optional<AppUser>appUser = repository.findByUsername(username);
+        if(!appUser.isPresent()){
+
+            throw  new UsernameNotFoundException("username provide not available");
+        }
+        else {
+            return appUser.get().getTodos();
+        }
+    }
+
+    public void deleteTodo(String username, Long id){
+        Optional<AppUser>appUser = repository.findByUsername(username);
+        if(appUser.isEmpty()){
+            throw  new UsernameNotFoundException("Username provided not available");
+        }
+        else {
+            todoRepository.deleteById(id);
+
+        }
+    }
+
+    public void userTodo(String username, Todo todo){
+        Optional<AppUser>appUser = repository.findByUsername(username);
+
+        if(appUser.get() == null){
+            throw new UsernameNotFoundException("User not Found");
+        }
+        else{
+            appUser.get().getTodos().add(todo);
+            todoRepository.save(todo);
+        }
+
+    }
+
 
     public AppUser getSingleUse(Long id) throws UsernameNotFoundException{
 
@@ -76,10 +118,6 @@ public class AppUserService {
         Optional<AppUser> appUser = repository.findByUsername(username);
         appUser.get().setRefreshToken(refreshToken);
         appUser.get().setAccessToken(token);
-    }
-    
-    publi String gitHub(){
-       return "Perfoming pull reguests on github.."
     }
 
 
