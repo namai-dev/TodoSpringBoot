@@ -58,6 +58,16 @@ public class CustomAuthentication extends UsernamePasswordAuthenticationFilter {
                 .sign(algorithm);
 
         //hey.saveToken(appUser.getUsername(), token, refreshToken);
+        
+      //   private String generateToken(Map<String, Object> claims, String subject) {
+       // final long now = System.currentTimeMillis();
+      //  return Jwts.builder()
+              //  .setClaims(claims)
+                //.setSubject(subject)
+                //.setIssuedAt(new Date(now))
+                //.setExpiration(new Date(now + JWT_TOKEN_VALIDITY * 1000))
+                //.signWith(SignatureAlgorithm.HS512, secret).compact();
+   // }
 
 
         response.setHeader("AccessToken", token);
